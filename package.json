@@ -1,0 +1,15 @@
+{
+  "name": "wxdev-master",
+  "version": "1.0.0",
+  "description": "https://github.com/akira-cn/wxdev",
+  "main": "noverify.js",
+  "dependencies": {
+    "qs": "^6.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

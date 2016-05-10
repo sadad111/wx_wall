@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wx client</title>
+  <style>
+    .headtitle{
+      width: 32px;
+    }
+    .pic{
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+  <ul id="messages">
+    
+  </ul>
+<script type="text/javascript">
+  function showImg(url) {
+
+    var frameid = 'frameimg' + Math.random();
+
+    console.debug(frameid);
+
+    console.debug(url);
+
+    window.img = '<img id="img" style="width:50%" src=\'' + url + '?' + Math.random() + '\' /><script>window.onload = function() { parent.document.getElementById(\'' + frameid + '\').height = document.getElementById(\'img\').height+\'px\'; }<' + '/script>';
+    document.write('<iframe id="' + frameid + '" src="javascript:parent.img;" frameBorder="0" scrolling="no" width="50%"></iframe>');
+  }
+
+  var msglist = document.getElementById('messages');
+  var ws = new WebSocket('ws://123.206.75.54:9902/');
+  ws.onmessage = function(evt)
+  {
+    console.log(evt.data)
+    var msg = JSON.parse(evt.data);
+    msg.user = msg.user || {};
+    var userName = msg.user.nickname;
+    var headimg = msg.user.headimgurl;
+    var oLi = document.createElement('li');
+    if(msg.xml.MsgType[0] === 'text'){
+      var content = msg.xml.Content[0];
+      oLi.innerHTML = userName + '<img class="headtitle" src="'+headimg+'">' + '说:' + content;
+    }else if(msg.xml.MsgType[0] === 'image'){
+      var url = msg.xml.PicUrl[0];
+      oLi.innerHTML = userName + '<img class="headtitle" src="'+headimg+'">' + '发表图片:' + '<img class="pic" src="'+showImg(url)+'">';
+    }
+    msglist.appendChild(oLi);
+  };
+</script>
+</body>
+</html>
